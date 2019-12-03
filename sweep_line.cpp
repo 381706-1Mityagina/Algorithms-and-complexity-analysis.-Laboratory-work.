@@ -6,7 +6,6 @@
 #include <vector>
 #include <map>
 #include <cmath>
-// #include "avl_tree.cpp"
 
 struct Point
 {
@@ -44,12 +43,12 @@ struct Point
 
 struct Segment
 {
-	Point beg, end;
-	Segment(const Segment & b) : beg(b.beg), end(b.end) {}
-	Segment(const Point & _beg, const Point & _end) : beg(_beg), end(_end) {}
+	Point begin, end;
+	Segment(const Segment & b) : begin(b.begin), end(b.end) {}
+	Segment(const Point & _beg, const Point & _end) : begin(_beg), end(_end) {}
 	Segment & operator = (Segment const & b) 
 	{ 
-		beg = b.beg; 
+		begin = b.begin; 
 		end = b.end; 
 		return *this; 
 	}
@@ -76,60 +75,46 @@ public:
 std::pair<bool, Point> intersect(const Segment & a, const Segment & b, bool print)
 {
 	Point ret('a', 0, 0);
-	double div = (a.beg.x - a.end.x)*(b.beg.y - b.end.y) - (a.beg.y - a.end.y)*(b.beg.x - b.end.x), t;
+	double div = (a.begin.x - a.end.x)*(b.begin.y - b.end.y) - (a.begin.y - a.end.y)*(b.begin.x - b.end.x), t;
 	if (fabs(div) < 1.0e-13)
 	{
-		if (print) 
-			std::cout << "divisor is zero" << std::endl;
 		return std::make_pair(false, ret);
 	}
-	ret.x = ((a.beg.x * a.end.y - a.beg.y * a.end.x) * (b.beg.x - b.end.x) - (a.beg.x - a.end.x) * (b.beg.x * b.end.y - b.beg.y * b.end.x)) / div;
-	ret.y = ((a.beg.x * a.end.y - a.beg.y * a.end.x) * (b.beg.y - b.end.y) - (a.beg.y - a.end.y) * (b.beg.x * b.end.y - b.beg.y * b.end.x)) / div;
-	if (print) 
-		std::cout << "found (" << ret.x << "," << ret.y << ")" << std::endl;
+	ret.x = ((a.begin.x * a.end.y - a.begin.y * a.end.x) * (b.begin.x - b.end.x) - (a.begin.x - a.end.x) * (b.begin.x * b.end.y - b.begin.y * b.end.x)) / div;
+	ret.y = ((a.begin.x * a.end.y - a.begin.y * a.end.x) * (b.begin.y - b.end.y) - (a.begin.y - a.end.y) * (b.begin.x * b.end.y - b.begin.y * b.end.x)) / div;
 	//probably some of these tests are redundant
-	if (fabs(a.end.x - a.beg.x) > 1.0e-9) 
+	if (fabs(a.end.x - a.begin.x) > 1.0e-9) 
 	{
-		t = (ret.x - a.beg.x) / (a.end.x - a.beg.x);
+		t = (ret.x - a.begin.x) / (a.end.x - a.begin.x);
 		if (t < 1.0e-9 || t > 1.0 - 1.0e-9)  
-		{ 
-			if (print) 
-				std::cout << "out of bound: " << t << std::endl; 
+		{
 			return std::make_pair(false, ret); 
 		}
 	}
-	if (fabs(a.end.y - a.beg.y) > 1.0e-9)
+	if (fabs(a.end.y - a.begin.y) > 1.0e-9)
 	{
-		t = (ret.y - a.beg.y) / (a.end.y - a.beg.y);
+		t = (ret.y - a.begin.y) / (a.end.y - a.begin.y);
 		if (t < 1.0e-9 || t > 1.0 - 1.0e-9)  
 		{ 
-			if (print) 
-				std::cout << "out of bound: " << t << std::endl; 
 			return std::make_pair(false, ret); 
 		}
 	}
-	if (fabs(b.end.x - b.beg.x) > 1.0e-9)
+	if (fabs(b.end.x - b.begin.x) > 1.0e-9)
 	{
-		t = (ret.x - b.beg.x) / (b.end.x - b.beg.x);
+		t = (ret.x - b.begin.x) / (b.end.x - b.begin.x);
 		if (t < 1.0e-9 || t > 1.0 - 1.0e-9)  
 		{ 
-			if (print) 
-				std::cout << "out of bound: " << t << std::endl; 
 			return std::make_pair(false, ret); 
 		}
 	}
-	if (fabs(b.end.y - b.beg.y) > 1.0e-9)
+	if (fabs(b.end.y - b.begin.y) > 1.0e-9)
 	{
-		t = (ret.y - b.beg.y) / (b.end.y - b.beg.y);
+		t = (ret.y - b.begin.y) / (b.end.y - b.begin.y);
 		if (t < 1.0e-9 || t > 1.0 - 1.0e-9)  
-		{ 
-			if (print) 
-				std::cout << "out of bound: " << t << std::endl; 
+		{
 			return std::make_pair(false, ret); 
 		}
 	}
-	if (print) 
-		std::cout << "intersection accepted" << std::endl;
 	return std::make_pair(true, ret);
 }
 
@@ -142,7 +127,7 @@ void intersect(int a, int b, const Point & I, std::vector<Segment> & segments, s
 		rem_end_events[1] = b;
 		for (int k = 0; k < 2; ++k)
 		{
-			std::pair< std::multimap<std::pair<double,int>, int,event_less>::iterator, std::multimap<std::pair<double,int>,int,event_less>::iterator > del = events.equal_range(std::make_pair(segments[rem_end_events[k]].end.x,SEG_END)); //get all events at position of the end
+			std::pair<std::multimap<std::pair<double,int>, int, event_less>::iterator, std::multimap<std::pair<double,int>,int,event_less>::iterator> del = events.equal_range(std::make_pair(segments[rem_end_events[k]].end.x, SEG_END)); //get all events at position of the end
 			bool flag = false;
 			for (std::multimap<std::pair<double,int>, int,event_less>::iterator it = del.first; it != del.second; ++it) //search over all events
 			{
@@ -153,7 +138,8 @@ void intersect(int a, int b, const Point & I, std::vector<Segment> & segments, s
 					break; //do not expect any more
 				}
 			}
-			if (!flag) std::cout << "Cannot find proper ending event for segment" << std::endl;
+			if (!flag) 
+				std::cout << "Cannot find proper ending event for segment" << std::endl;
 		}
 	}
 	//add new segment with intersection point up to end
@@ -176,12 +162,6 @@ void intersect(int a, int b, const Point & I, std::vector<Segment> & segments, s
 	segments[b].end = I;
 	//add event of ending of old segment
 	events.insert(std::make_pair(std::make_pair(I.x, SEG_END), b));
-	if (print)
-	{
-		std::cout << "Number of events: " << events.size() << std::endl;
-		for (std::multimap<std::pair<double, int>, int,event_less>::iterator it = events.begin(); it != events.end(); ++it)
-			std::cout << "x: " << it->first.first << " type " << (it->first.second == SEG_START ? "start" : "end") << " segment " << it->second << std::endl;
-	}
 }
 
 //find all intersection points
@@ -189,31 +169,13 @@ void intersect(std::vector<Segment> & segments, std::vector<Point> & intersectio
 {
 	std::multimap<std::pair<double,int>,int,event_less> events;
 	std::multimap<Point,int> sweep;
-	
-	if(print)
-	{
-		std::cout << "Input segments[" << segments.size() << "]: " << std::endl;
-		for (std::vector<Segment>::iterator it = segments.begin(); it != segments.end(); ++it)
-			std::cout << "[ " << it->beg.letter << "(" << it->beg.x << "," << it->beg.y << "), " << it->end.letter << "(" << it->end.x << "," << it->end.y << ") ] " << std::endl;
-		std::cout << "Create events based on segments." << std::endl;
-	}
 
 	for (int k = 0; k < (int)segments.size(); ++k)
 	{
-		if (segments[k].beg.x > segments[k].end.x)
-			std::swap(segments[k].beg, segments[k].end);
-		events.insert(std::make_pair(std::make_pair(segments[k].beg.x,SEG_START),k));
+		if (segments[k].begin.x > segments[k].end.x)
+			std::swap(segments[k].begin, segments[k].end);
+		events.insert(std::make_pair(std::make_pair(segments[k].begin.x,SEG_START),k));
 		events.insert(std::make_pair(std::make_pair(segments[k].end.x,SEG_END), k));
-	}
-
-
-	if (print)
-	{
-		std::cout << "Number of events: " << events.size() << std::endl;
-		for (std::multimap<std::pair<double, int>, int,event_less>::iterator it = events.begin(); it != events.end(); ++it)
-			std::cout << "x: " << it->first.first << " type " << (it->first.second == SEG_START ? "start" : "end") << " segment " << it->second << std::endl;
-		
-		std::cout << " Start parsing events" << std::endl;
 	}
 	
 	while (!events.empty())
@@ -224,41 +186,24 @@ void intersect(std::vector<Segment> & segments, std::vector<Point> & intersectio
 		events.erase(first);
 		if (t == SEG_START)
 		{
-			if( print ) 
-				std::cout << "Segment " << s << " start" << std::endl;
 			//check if there is a line with same position
-			std::multimap<Point, int>::iterator ins = sweep.insert(std::make_pair(segments[s].beg, s));
-			if (print)
-			{
-				std::cout << "Inserted into sweep" << std::endl;
-				for (std::multimap<Point, int>::iterator it = sweep.begin(); it != sweep.end(); ++it)
-					std::cout << it->first.letter << "(" << it->first.x << "," << it->first.y << ")" << " segment " << it->second << std::endl;
-			}
+			std::multimap<Point, int>::iterator ins = sweep.insert(std::make_pair(segments[s].begin, s));
 			//check line (or lines above current)
 			for (int dir = 0; dir <= 1; ++dir) // look up or down
 			{
-				if( print ) std::cout << "Looking " << (dir ? "up" : "down") << std::endl;
 				std::multimap<Point, int>::iterator iter = ins;
 				while ((dir ? ++iter : iter--) != (dir ? sweep.end() : sweep.begin())) //y is greater for next
 				{
-					if (print) 
-						std::cout << "test " << s << " with " << iter->second << std::endl;
-					if (segments[s].beg != segments[iter->second].beg) //ignore same starting position
+					if (segments[s].begin != segments[iter->second].begin) //ignore same starting position
 					{
-						if (print) 
-							std::cout << "checking intersection" << std::endl;
 						std::pair<bool, Point> I = intersect(segments[s], segments[iter->second],print);
 						if (I.first)
 						{
 							I.second.letter += (char)intersections.size();
-							if( print ) 
-								std::cout << "Intersection of " << s << " and " << iter->second << " at " << I.second.letter << "(" << I.second.x << "," << I.second.y << ")" << std::endl;
 							intersections.push_back(I.second);
 							intersect(s, iter->second, I.second, segments, sweep, events,print);
 						}
 					}
-					else if (print) 
-						std::cout << "skipping segments with same starting point" << std::endl;
 					if ((2*dir-1)*(iter->first.y - ins->first.y) > 0) //visited line is above (below) current
 						break; //stop search
 				}
@@ -266,12 +211,8 @@ void intersect(std::vector<Segment> & segments, std::vector<Point> & intersectio
 		}
 		else if (t == SEG_END)
 		{
-			if( print ) 
-				std::cout << "Segment " << s << " end" << std::endl;
 			//remove segment from sweep
-			std::pair< std::multimap<Point, int>::iterator, std::multimap<Point, int>::iterator > range = sweep.equal_range(segments[s].beg);
-			if( print ) 
-				std::cout << "Range distance " << std::distance(range.first,range.second) << " sweep size " << sweep.size() << std::endl;
+			std::pair< std::multimap<Point, int>::iterator, std::multimap<Point, int>::iterator > range = sweep.equal_range(segments[s].begin);
 			std::multimap<Point, int>::iterator above = range.second, below = range.first;
 			bool flag = false, test = true;
 			if( below-- == sweep.begin() ) 
@@ -284,12 +225,6 @@ void intersect(std::vector<Segment> & segments, std::vector<Point> & intersectio
 			{
 				if( it->second == s) //found necessery segment
 				{
-					if (print)
-					{
-						std::cout << "Erase segment " << s << " from sweep: " << std::endl;
-						for (std::multimap<Point, int>::iterator it = sweep.begin(); it != sweep.end(); ++it)
-							std::cout << it->first.letter << "(" << it->first.x << "," << it->first.y << ")" << " segment " << it->second << std::endl;
-					}
 					sweep.erase(it);
 					flag = true;
 					break; //do not expect any more
@@ -299,24 +234,16 @@ void intersect(std::vector<Segment> & segments, std::vector<Point> & intersectio
 				std::cout << __FILE__ << ":" << __LINE__ <<  " Error: cannot find segment " << s << " in sweep" << std::endl;
 			if (test)
 			{
-				if (print) 
-					std::cout << "test " << below->second << " with " << above->second << std::endl;
-				if (segments[above->second].beg != segments[below->second].beg)
+				if (segments[above->second].begin != segments[below->second].begin)
 				{
-					if (print) 
-						std::cout << "checking intersection" << std::endl;
 					std::pair<bool, Point> I = intersect(segments[below->second], segments[above->second],print);
 					if (I.first)
 					{
 						I.second.letter += (char)intersections.size();
-						if( print ) 
-							std::cout << "Intersection of " << below->second << " and " << above->second << " at " << I.second.letter << "(" << I.second.x << "," << I.second.y << ")" << std::endl;
 						intersections.push_back(I.second);
 						intersect(below->second, above->second, I.second, segments, sweep, events,print);
 					}
 				}
-				else if (print) 
-					std::cout << "Skipping segments with same starting point" << std::endl;
 			}
 		}
 	}

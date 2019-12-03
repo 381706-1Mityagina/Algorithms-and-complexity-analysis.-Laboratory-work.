@@ -28,18 +28,11 @@ int main() {
 		result[i][j] = Intersect(list[i], list[j], context);
 		cout <<  result[i][j].type << "\n";
 	}
-	//root = avl.insert(root, );
 	// --------------------------------------------------------------------------------------------------------------
 
 	avlTree avl;
 	node node1, node2, node3, node4;
 	
-	// vector<Line*> lines;
-
-	// avl.newNode(v1.GetY());
-	// avl.newNode(v2.GetY());
-	// avl.newNode(v3.GetY());
-	// avl.newNode(v4.GetY());
 
 	return 0;
 }
