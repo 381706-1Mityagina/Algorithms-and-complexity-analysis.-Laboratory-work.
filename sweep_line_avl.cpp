@@ -66,7 +66,7 @@ double find_max_y(std::vector<LineSegment> segments, int number_of_segments) {
 
 int main()
 {
-	int number_of_segments = 5;
+	int number_of_segments = 10;
 	std::vector<LineSegment> segments(number_of_segments);
 	avlTree avl;
 
@@ -75,7 +75,6 @@ int main()
 	for (int i = 0; i < number_of_segments; i++)
 	{
 		segments[i] = LineSegment("", MyVector(2., 1. - i, 0.), MyVector(-3., 14., 0.), Context(0.000001));
-		std::cout << "segment " << i << " start Y is " << segments[i].start.GetY() << std::endl;
 	}
 	std::cout << "\n";
 
@@ -84,26 +83,23 @@ int main()
 	for (int i = 0; i < number_of_segments; i++)
 		segments[i] = forUsage.at(i);
 
-	for (int i = 0; i < number_of_segments; i++)
-	{
-		std::cout << "segment " << i << " start Y is " << segments[i].start.GetY() << std::endl;
-	}
-
 	std::vector<Point> intersections;
 	std::vector<Segment> segments_new;
 
 	for (int i = 0; i < number_of_segments; i++)
-		// segments_new.push_back(Segment(Point('A', find_min_x(segments, number_of_segments), find_min_y(segments, number_of_segments)), Point('C', find_min_x(segments, number_of_segments), find_max_y(segments, number_of_segments))));
-		segments_new.push_back(Segment(Point('A', i, i + 1), Point('C', -i, -i + 2)));
+	{
+		segments_new.push_back(Segment(Point(' ', -i + 3, i + 1), Point(' ', 2 * i - 1, -i + 1)));
+	}
 
 	intersect(segments_new, intersections, false);
 
 	std::cout << "Intersection points[" << intersections.size() << "]: " << std::endl;
 	for (std::vector<Point>::iterator it = intersections.begin(); it != intersections.end(); ++it)
-		std::cout << it->letter << "(" << it->x << "," << it->y << ") " << std::endl;
-	std::cout << "Segments[" << segments_new.size() << "]: " << std::endl;
-	for (std::vector<Segment>::iterator it = segments_new.begin(); it != segments_new.end(); ++it)
-		std::cout << "[ " << it->begin.letter << "(" << it->begin.x << "," << it->begin.y << "), " << it->end.letter << "(" << it->end.x << "," << it->end.y << ") ] " << std::endl;
+		std::cout << " " << "(" << it->x << "," << it->y << ") " << std::endl;
+
+	std::cout << "Segments[" << number_of_segments << "]: " << std::endl;
+	for (int i = 0; i < number_of_segments; i++)
+		std::cout << "[ " << " " << "(" << segments_new[i].begin.x << "," << segments_new[i].begin.y << "), " << " " << "(" << segments_new[i].end.x << "," << segments_new[i].end.y << ") ] " << std::endl;
 
 	return 0;
 }
