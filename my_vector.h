@@ -9,7 +9,7 @@ using namespace std;
 
 class MyVector 
 {
-private:
+public:
 	double X;
 	double Y;
 	double Z;

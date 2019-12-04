@@ -25,11 +25,11 @@ void auto_generation_last_intersection_position(std::vector<LineSegment> &segmen
 		// segments[i].end.Y = 4;
 		// segments[i].start.Z = segments[i].end.Z = 0;
 
-		segments.push_back(LineSegment("", MyVector(float(i), 1.0, 0.0), MyVector(float(i) + 0.5, 4.0, 0.0), Context(0.000001)));
+		segments.push_back(LineSegment("", MyVector(float(i) / 10, 1.0, 0.0), MyVector(float(i) / 10 + 0.5, 4.0, 0.0), Context(0.0001)));
 	}
 
-	segments.push_back(LineSegment("", MyVector(float(number_of_segments), 1.0, 0.0), MyVector(float(number_of_segments) + 3.0, 4.0, 0.0), Context(0.000001)));
-	segments.push_back(LineSegment("", MyVector(float(number_of_segments) + 2.0, 1.0, 0.0), MyVector(float(number_of_segments) + 1.0, 4.0, 0.0), Context(0.000001)));
+	segments.push_back(LineSegment("", MyVector(float(number_of_segments) / 10, 1.0, 0.0), MyVector(float(number_of_segments) / 10 + 3.0, 4.0, 0.0), Context(0.0001)));
+	segments.push_back(LineSegment("", MyVector(float(number_of_segments) / 10 + 2.0, 1.0, 0.0), MyVector(float(number_of_segments) / 10 + 1.0, 4.0, 0.0), Context(0.0001)));
 
 	// segments[number_of_segments - 2].start.X = number_of_segments - 2 + 2;
 	// segments[number_of_segments - 2].end.X = number_of_segments - 2 + 4;
