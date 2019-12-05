@@ -13,10 +13,18 @@ public:
 	double X;
 	double Y;
 	double Z;
+
+	int segment_number;
+	int start_or_end;  // 0 = start, 1 = end
 public:
-	MyVector() : X(0.0), Y(0.0), Z(0.0) {}
+	MyVector() : X(0.0), Y(0.0), Z(0.0), segment_number(0), start_or_end(-1) {}
+	MyVector(double x, double y, double z) {
+		X = x;
+		Y = y;
+		Z = z;
+	}
 	~MyVector();
-	MyVector(double x, double y, double z) : X(x), Y(y), Z(z) {}
+	MyVector(double x, double y, double z, int segment_number, int start_or_end) : X(x), Y(y), Z(z) {}
 
 	double GetX() const 
 	{
@@ -38,7 +46,8 @@ MyVector operator- (const MyVector& lhs, const MyVector& rhs);
 
 MyVector::~MyVector()
 {
-	X = Y = Z = 0;
+	X = Y = Z = segment_number = 0;
+	start_or_end = -1;
 }
 
 MyVector operator* (double k, const MyVector& v);

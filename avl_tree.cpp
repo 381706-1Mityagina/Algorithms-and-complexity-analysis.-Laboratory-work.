@@ -2,6 +2,8 @@
 // ---- EFFECTIVE ALGORITHM with avl trees ---- //
 //----------------------------------------------//
 #include <iostream>
+// #include "line_segment.cpp"
+#include "segments_generate.cpp"
 
 // АВЛ-дерево — сбалансированное по высоте двоичное дерево поиска: для каждой его вершины высота её 
 // двух поддеревьев различается не более чем на 1.
@@ -14,6 +16,7 @@ int smth = 0;
 
 struct node
 {
+    LineSegment line;
     double key;
     int height;
     struct node *left;
@@ -23,6 +26,7 @@ struct node
 class avlTree
 {
     public:
+        node* newNode(double key, LineSegment line);
         node* newNode(double key);
         node* rightRotate(struct node *y);
         node* leftRotate(struct node *x);
@@ -159,6 +163,18 @@ void avlTree::display(node *ptr, int level)
 }
  
 // -------------------------------------------------------------------------------------------------
+struct node* avlTree::newNode(double key, LineSegment line)
+{
+    struct node* node = (struct node*)
+                        malloc(sizeof(struct node));
+    node->line = line;
+    node->key = key;
+    node->left = NULL;
+    node->right = NULL;
+    node->height = 1;  // новый узел изначально добавляется в лист
+    return(node);
+}
+
 struct node* avlTree::newNode(double key)
 {
     struct node* node = (struct node*)

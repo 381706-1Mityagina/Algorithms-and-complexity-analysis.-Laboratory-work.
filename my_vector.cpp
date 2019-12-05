@@ -20,7 +20,11 @@ MyVector operator*(double k, const MyVector& v)
 
 ostream& operator<<(ostream& os, const MyVector& v) 
 {
-	os << '(' << v.GetX() << ',' << v.GetY() << ',' << v.GetZ() << ')';
+	if (v.start_or_end > 0)
+		os << '(' << v.GetX() << ',' << v.GetY() << ',' << v.GetZ() << ')' << " which is " << "the end" << " of segment " << v.segment_number << "\n";
+	else
+		os << '(' << v.GetX() << ',' << v.GetY() << ',' << v.GetZ() << ')' << " which is " << "the start" << " of segment " << v.segment_number << "\n";
+
 	return os;
 }
 

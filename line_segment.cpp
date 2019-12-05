@@ -102,6 +102,24 @@ LineSegment getSegmentByY(double _y, std::vector<LineSegment> input, int number_
 	}
 	return input[i];
 }
+
+MyVector getPointByX(double _x, std::vector<LineSegment> input, int number_of_segments) 
+{
+	int i;
+	for (i = 0; i < 2 * number_of_segments; i++)
+	{
+		if (input[i].start.GetX() == _x)
+		{
+			return input[i].start;
+			break;
+		}
+		if (input[i].end.GetX() == _x)
+		{
+			return input[i].end;
+			break;
+		}
+	}
+}
 // -------------------------------------------------------------------------------------------------
 std::vector<LineSegment> sort_y(std::vector<LineSegment> input, int number_of_segments)
 {
@@ -116,6 +134,26 @@ std::vector<LineSegment> sort_y(std::vector<LineSegment> input, int number_of_se
 	for (int i = 0; i < number_of_segments; i++)
 	{
 		output.at(i) = getSegmentByY(y_component.at(i), input, number_of_segments);
+	}
+
+	return output;
+}
+
+std::vector<MyVector> sort_x_points(std::vector<LineSegment> input, int number_of_segments)
+{
+	std::vector<MyVector> output(2 * number_of_segments);
+	std::vector<double> x_component(2 * number_of_segments);
+
+	for (int i = 0; i < number_of_segments; i++)
+		x_component[i] = input[i].start.GetX(); 
+	for (int i = number_of_segments; i < 2 * number_of_segments; i++)
+		x_component[i] = input[i].end.GetX(); 
+	
+	sort(x_component.begin(), x_component.end());
+
+	for (int i = 0; i < 2 * number_of_segments; i++)
+	{
+		output.at(i) = getPointByX(x_component[i], input, number_of_segments);
 	}
 
 	return output;
