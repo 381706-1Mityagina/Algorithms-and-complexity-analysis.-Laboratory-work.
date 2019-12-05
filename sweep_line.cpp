@@ -204,7 +204,7 @@ void intersect(std::vector<Segment> & segments, std::vector<Point> & intersectio
 							intersect(s, iter->second, I.second, segments, sweep, events,print);
 						}
 					}
-					if ((2*dir-1)*(iter->first.y - ins->first.y) > 0) //visited line is above (below) current
+					if ((2 * dir - 1) * (iter->first.y - ins->first.y) > 0) //visited line is above (below) current
 						break; //stop search
 				}
 			}
