@@ -101,14 +101,12 @@ void pain_work(std::vector<LineSegment> segments, int number_of_segments)
 	avlTree avl_tree;
 	Result result;
 	Context context = Context(0.000001);
-	node root;
-	// avl_tree.insert(&root, 0);
 
 	for (int i = 0; i < 2 * number_of_segments; i++) 
 	{
 		if (points_set[i].start_or_end == 0)
 		{
-			// avl_tree.newNode(i + 1, segments[points_set[i].segment_number]);
+			avl_tree.newNode(i, segments[points_set[i].segment_number]);
 			result = Intersect(segments[points_set[i].segment_number], segments[points_set[i + 1].segment_number], context);
 			if (result.type > 0) 
 				break;
@@ -119,16 +117,16 @@ void pain_work(std::vector<LineSegment> segments, int number_of_segments)
 					break;
 			}
 		}
-		else 
-		{
-			if (i > 0 && i < 2 * number_of_segments - 1)
-			{
-				result = Intersect(segments[points_set[i + 1].segment_number], segments[points_set[i - 1].segment_number], context);
-				if (result.type > 0) 
-					break;
-				// avl_tree.deleteNode(&root, i + 1);	
-			}
-		}
+		// else 
+		// {
+		// 	if (i > 0 && i < 2 * number_of_segments - 1)
+		// 	{
+		// 		result = Intersect(segments[points_set[i + 1].segment_number], segments[points_set[i - 1].segment_number], context);
+		// 		if (result.type > 0) 
+		// 			break;
+		// 		// avl_tree.deleteNode(&root, i + 1);	
+		// 	}
+		// }
 	}
 }
 
@@ -155,7 +153,7 @@ int main()
 	// std::vector<Point> intersections;
 	// std::vector<Segment> segments_new;
 
-	auto_generation_last_intersection_position_sweep(segments_new, number_of_segments); 
+	auto_generation_last_intersection_position_naive(segments, number_of_segments); 
 	double t1, t2, dt;
 	t1 = clock();
 	// intersect(segments_new, intersections, false);

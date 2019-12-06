@@ -138,8 +138,6 @@ void intersect(int a, int b, const Point & I, std::vector<Segment> & segments, s
 					break; //do not expect any more
 				}
 			}
-			if (!flag) 
-				std::cout << "Cannot find proper ending event for segment" << std::endl;
 		}
 	}
 	//add new segment with intersection point up to end
@@ -219,8 +217,6 @@ void intersect(std::vector<Segment> & segments, std::vector<Point> & intersectio
 				test = false;
 			if( above == sweep.end() ) 
 				test = false;
-			if( test && print ) 
-				std::cout << "Test will be performed" << std::endl;
 			for (std::multimap<Point, int>::iterator it = range.first; it != range.second; ++it) //search over all events
 			{
 				if( it->second == s) //found necessery segment
@@ -230,8 +226,6 @@ void intersect(std::vector<Segment> & segments, std::vector<Point> & intersectio
 					break; //do not expect any more
 				}
 			}
-			if (!flag) 
-				std::cout << __FILE__ << ":" << __LINE__ <<  " Error: cannot find segment " << s << " in sweep" << std::endl;
 			if (test)
 			{
 				if (segments[above->second].begin != segments[below->second].begin)
